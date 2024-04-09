@@ -1,0 +1,240 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Forms General {% endblock %}
+
+<!-- Element injected in the BODY element -->
+{% block body_class %} sidebar-mini {% endblock body_class %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+<!-- Google Font: Source Sans Pro -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="/static/assets/plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Загрузка таблиц</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">Загрузка таблиц</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-success collapsed-card">
+            <div class="card-header" style="background-color:#7147e8e6">
+              <h3 class="card-title">Формат заполнения</h3>
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+                <p class="text-left">
+                  <ul>
+                    <li><b>Описание</b> - описание БД объекта необходимо записать в поле Description, если данное поле заполнено в Excel файле, а если поле не заполнено в Excel - ничего не делать, то есть не затирать старое значение.</li>
+                    <li><b>Объект БД</b> - объект БД, который состоит из 3 частей: система, схема, таблица. Пример значения: INSTANCE.defult.SCHEMA.TABLE</li>
+                  </ul>
+                </p>  
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- general form elements disabled -->
+          <div class="card card-success">
+            <div class="card-header" style="background-color:#7147e8e6">
+              <h3 class="card-title">Создание файла для загрузки</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <form method="POST">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <!-- text input -->
+                    <div class="form-group">
+                      <label>Описание</label>
+                      <input type="text" id="description" class="form-control" placeholder="Описание"  autocomplete="off">
+                    </div>
+                  </div>
+                  <div class="col-sm-5">
+                    <!-- text input -->
+                    <div class="form-group">
+                      <label>Объект БД</label>
+                      <input type="text" id="objectdb" class="form-control" placeholder="Объект БД"  autocomplete="off">
+                    </div>
+                  </div>
+                  <div class="col-sm-1">
+                    <!-- text input -->
+                    <div class="form-group">
+                      <label>Добавить</label>
+                      <button type="button" class="btn btn-block btn-default btn-sm" id="bt">+</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">таблица для преобразования</h3>
+                  </div>
+                  <!-- /.card-header -->
+                  <div class="card-body table-responsive p-0" style="height: 300px;">
+                    <table class="table table-head-fixed text-nowrap" id="tablefortsv">
+                      <thead>
+                        <tr>
+                          <th style="width: 40%;">Описание</th>
+                          <th style="width: 40%;">Объект БД</th>
+                        </tr>
+                      </thead>
+                      <tbody id='tblbody'>
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- /.card-body -->
+                  <div class="card-footer">
+                    <button type="submit" class="btn btn-success" id="btntsvdownload">Преобразовать в файл</button>
+                  </div>
+                </div>
+                <div id='inp_tbl'></div>
+              </form>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+          <!-- general form elements disabled -->
+          <div class="card card-success">
+            <div class="card-header" style="background-color:#7147e8e6">
+              <h3 class="card-title">Загрузка из файла</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <form enctype="multipart/form-data" method="POST">
+                <div class="form-group">
+                  <!-- <label for="customFile">Custom File</label> -->
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="customFile" name="f">
+                    <label class="custom-file-label" for="customFile">Choose file</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="Check1" name="checkSkipHeader">
+                    <label class="form-check-label" for="exampleCheck1" id="checkSkipHeader">Первая строка - заголовки</label>
+                  </div>
+                  <div class="card-footer">
+                    <input type="submit" class="btn btn-success" value="Загрузить">
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!--/.col (right) -->
+      </div>
+      <!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<!-- jQuery -->
+<script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="/static/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- bs-custom-file-input -->
+<script src="/static/assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/static/assets/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/static/assets/js/demo.js"></script>
+<script>
+  $(function () {
+    bsCustomFileInput.init();
+  });
+</script>
+
+<!-- DataTables -->
+<script src="/static/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/static/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/static/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<!-- page script -->
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true,
+      "autoWidth": false,
+    });
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
+<script>
+  document.getElementById('bt').addEventListener('click', f1);
+  function f1() {
+    let description = document.getElementById('description').value;
+    let objectdb = document.getElementById('objectdb').value;
+    var row = '<tr><td>' + description + '</td><td>' + objectdb + '</td></tr>'
+    document.getElementById('tblbody').innerHTML += row
+    document.getElementById('description').value = ""
+    document.getElementById('objectdb').value = ""
+  }
+</script>
+<script>
+  function escapeHtml(text) {
+    var map = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    };
+
+    return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+  }
+  document.getElementById('btntsvdownload').addEventListener('click',f2);
+  function f2(){
+    var row = document.getElementById('tablefortsv');
+    document.getElementById('inp_tbl').innerHTML ='<input type="hidden" name="table" value="' + escapeHtml(row.outerHTML) + '">'
+    }
+</script>
+<script>
+  document.getElementById('ddd').addEventListener('click',f3);
+  function f3(){
+    console.log(document.getElementById('Check1'))
+    }
+</script>
+
+{% endblock javascripts %}

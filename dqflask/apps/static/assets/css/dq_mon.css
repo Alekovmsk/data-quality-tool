@@ -1,0 +1,55 @@
+
+.scroll-table table {
+  table-layout:fixed;
+	display: inline-block;
+	vertical-align: top;
+	max-width: 100%;
+  max-height: 720px;
+	max-height: 100%;
+	overflow-x: auto;
+  background:#FFFFFF;
+}
+.scroll-table tbody td {
+	max-width:300px;
+}
+.scroll-table thead th {
+	max-width:300px;
+  background:#FFFFFF;
+  vertical-align: top;
+}
+.t-head {
+  max-width:300px;
+  background:#8B0000;
+  vertical-align: top;
+}
+
+
+.btn-purple{color:#fff;border-color:#7147e8e6;font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    background-color:#7147e8e6;
+    border: 1px solid;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;}
+.btn-purple:hover{color:#fff;background-color:#785acc;border-color:#785acc; border: 1px solid;}
+.btn-purple.focus,.btn-purple:focus{box-shadow:0 0 0 0 rgba(220,53,69,.5)}
+.btn-purple.disabled,.btn-purple:disabled{color:#fff;background-color:#785acc;border-color:#785acc; border: 1px solid;}
+.btn-purple:not(:disabled):not(.disabled).active,.btn-purple:not(:disabled):not(.disabled):active,
+.show>.btn-purpledropdown-toggle{color:#fff;background-color:#785acc;border-color:#785acc; border: 1px solid;}
+.btn-purple:not(:disabled):not(.disabled).active:focus,
+.btn-purple:not(:disabled):not(.disabled):active:focus,
+.show>.btn-purple.dropdown-toggle:focus{box-shadow:0 0 0 0 rgba(220,53,69,.5)}
+
+
+#Purple .slider-selection{
+    background:#7147e8e6
+}
+#Purple .slider-handle{
+    background:#7147e8e6
+}
+
+.btn-width {
+  width:15%;
+}

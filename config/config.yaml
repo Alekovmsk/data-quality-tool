@@ -1,0 +1,73 @@
+database:
+  dqServer: # database credentials
+    type: postgresql
+    host: 172.16.1.4
+    port: 5432
+    db: ssdq
+    user: ssdq_admin
+    password: admin_pass
+  flaskDb: # database credentials (for admin database with users and logs)
+    type: postgresql
+    host: 172.16.1.4
+    port: 5432
+    db: ssdq_admin
+    user: ssdq_admin
+    password: admin_pass
+  srcUsers: # database credentials for uploading users info
+    type: postgresql
+    host: localhost
+    port: 5432
+    db: db_name
+    user: user_name
+    password: user_pass
+
+server: # credentials for connecting to airflow server
+  airflow:
+    host: airflow_host
+    path: /app/airflow/
+    venvpath: /app/airflow/venv/bin/activate
+    username: admin
+    password: admin
+
+airflowAPI: # url and credentials for API airflow
+  url: http://localhost:8080/api/v1/dags/
+  auth:
+    login: airflowlogin
+    password: airflowpass
+
+keycloak: # Keycloak info
+  secret: 'test23'
+  realm: 'master'
+  client: 'ssdq'
+
+ssdq: # port for ssdq application
+  port: 5000
+  JWT_ACCESS_TOKEN_EXPIRES: 15 # JWT duration (minutes)
+
+#ssl: # ssl info
+  #cert: /app/dqmon/dqflask/cert # path of certificate
+  #key: /app/dqmon/dqflask/cert # path of certificate's key
+
+jira: # url and credentials for API Jira
+  url: https://jira.net/rest/api/2/issue/
+  auth:
+    login: jiralogin
+    password: jirapass
+
+# Logging
+logging:
+  log_formatter: '[%(levelname)s]: %(message)s'
+  log_level: 'INFO'
+  systemlog_level: 'INFO'
+  upload_schedule:
+    upload_midnight: True # boolean. If true - upload at 23:59 every day
+    upload_frequency: 300 # frequency of upload logs into database (in seconds). If equal 0 - there will be no log insert into database during the day
+  storage_depth: 3 # depth of log storage in years
+
+# Upload Users
+users:
+  load_users: True # boolean. If true - update users info at 23:59 every day
+  users_table: 'user_entity' # Tablename with user's info
+  users_schema: 'public' # Schema with user's info
+  deps_table: 'user_attribute' # Tablename with departments info
+  deps_schema: 'public' # Schema with departments info

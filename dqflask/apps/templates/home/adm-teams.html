@@ -1,0 +1,159 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Forms General {% endblock %}
+
+<!-- Element injected in the BODY element -->
+{% block body_class %} sidebar-mini {% endblock body_class %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+<!-- Google Font: Source Sans Pro -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="/static/assets/plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
+<link rel="stylesheet" href="/static/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="/static/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+<link rel="stylesheet" href="/static/assets/css/dq_mon.css">
+<link rel="stylesheet" href="/static/assets/css/select_rows.css">
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Команды</h1>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+  <input type="text" id="userTeams" value="{{ team_list }}" hidden>
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          {% set notifications = current_user.has_notification() %}
+            {% if notifications %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              <span>Есть необработанные заявки на вступление в команду</span>
+              <span>Для обработки заявок пройдите по <a href="/admin/teams-requests" style="color: #19afff;">ссылке</a></span>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aira-hidden="true">&times;</span>
+              </button>
+            </div>
+            {% endif %}
+          <form method="post">
+            <div class="card card-success card">
+              <div class="card-header" style="background-color:#7147e8e6">
+                <h3 class="card-title">Добавление команды</h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Наименование*</label>
+                      <input type="text" class="form-control" id="name" name="name" >
+                    </div>
+                    <div class="form-group">
+                      <label>Описание*</label>
+                      <input type="text" class="form-control" id="description" name="description" required>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Редактирование контролей команды</label>
+                      <select class="form-control" id="edit_mode" name="edit_mode" required>
+                        <option value="nobody" selected>Только офицер</option>
+                        <option value="all">Все члены команды</option>
+                        <option value="owners">Только администраторы команды</option>
+                      </select>
+                    </div>
+                    <div id="team_id_div" class="form-group" hidden>
+                      <label>ID Команды</label>
+                      <input type="text" disabled class="form-control" value="" id="team_id" name="team_id">
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <button type="button" style="float:left; width:25%" class="btn-purple" id="addTeam">Добавить команду</button>
+                  </div>
+                  <div class="col-sm-6">
+                    <button type="button" style="float:left; width:25%" class="btn-purple" id="requestToTeam" hidden>Вступить в команду</button>
+                    <button type="button" style="float:left; width:25%" class="btn-purple" id="exitTeam" hidden>Выйти из команды</button>
+                  </div>
+                </div>
+              <!-- /.card-body -->
+            </div>
+            </div>
+            <!-- /.card-body -->
+          </form>
+          <div class="card card-success">
+            <div class="card-header" style="background-color:#7147e8e6">
+              <h3 class="card-title">Все команды</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <div id="table">
+              <table id="teams" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Название</th>
+                    <th>Описание</th>
+                    <th style="width: 15%;">Редактирование контролей команды</th>
+                    <th>Член команды</th>
+                    <th>Объект удалён</th>
+                  </tr>
+                </thead>
+              </table>
+            <!-- /.card-body -->
+          </div>
+        </div>
+        <!--/.col (right) -->
+      </div>
+        </div>
+      </div>
+    </div>
+      <!-- /.row --><!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<!-- jQuery -->
+<script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="/static/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- bs-custom-file-input -->
+<script src="/static/assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/static/assets/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/static/assets/js/demo.js"></script>
+<script src="/static/assets/js/sweetalert2.all.min.js"></script>
+<!-- DataTables -->
+<script src="/static/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/static/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/static/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script type="module" src="/static/assets/js/dqAdmin/dataTableAdmin.js"></script>
+<script type="module" src="/static/assets/js/dqAdmin/addEntity.js"></script>
+<script type="module" src="/static/assets/js/dqAdmin/dqTeams.js"></script>
+
+{% endblock javascripts %}

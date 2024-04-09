@@ -1,0 +1,348 @@
+{% extends "layouts/base.html" %} {% block title %} Specification {% endblock %}
+<!-- Element injected in the BODY element -->{% block body_class %} {% endblock body_class %}
+<!-- Specific Page CSS goes HERE  -->{% block stylesheets %}
+<!-- Font Awesome -->
+<link rel="stylesheet" href="/static/assets/plugins/fontawesome-free/css/all.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
+<!-- Google Font: Source Sans Pro -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="/static/assets/plugins/fontawesome-free/css/all.min.css">
+<!-- daterange picker -->
+<link rel="stylesheet" href="/static/assets/plugins/daterangepicker/daterangepicker.css">
+<!-- iCheck for checkboxes and radio inputs -->
+<link rel="stylesheet" href="/static/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+<!-- Bootstrap Color Picker -->
+<link rel="stylesheet" href="/static/assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+<!-- Tempusdominus Bootstrap 4 -->
+<link rel="stylesheet" href="/static/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+<!-- Select2 -->
+<link rel="stylesheet" href="/static/assets/plugins/select2/css/select2.min.css">
+
+<link rel="stylesheet" href="/static/assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+<!-- Bootstrap4 Duallistbox -->
+<link rel="stylesheet" href="/static/assets/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
+<link rel="stylesheet" href="/static/assets/css/1.css"> {% endblock stylesheets %} {% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <br>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+
+    <!------------------------------------------------------------------------------------------------------------------------------------>
+    <div>
+        <div class="t-Body-contentInner">
+            <div class="container" id="parent">
+                <div>
+                    <div class="card card-warning">
+                        <div class="card-header bg-primary">
+                            <h3 class="card-title" style="color: white">Панель формирования спецификаций</h3>
+                        </div>
+
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Выберите спецификацию</label>
+                                <select id="menu1" class="form-control select2" style="width: 100%;" onchange="...">
+                                    <option value="0"></option>
+                                    {% for spec in specs %}
+                                    <option value={{ spec.id }} {% for s in sp %} {% if spec.id == s.uk %} selected
+                                            {% endif %} {% endfor %} >
+										{{ spec.id ~ ' - ' ~ spec.name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-block btn-default" id="createSpec"
+                                    onclick="showWebSpec()">Вывести спецификацию
+                            </button>
+                            <button type="button" class="btn btn-block btn-default" id="printSpec"
+                                    onclick="window.print()">Распечатать
+                            </button>
+                            <button type="button" class="btn btn-block btn-default"
+                                    onclick="showChangeSpec()">Изменение спецификации
+                            </button>
+                            <button type="button" class="btn btn-block btn-default"
+                                    onclick="showResultsSpec()">Посмотреть результаты работы контроля
+                            </button>
+                        </div>
+
+                        {% for s in sp %}
+                        <div id='version' style="margin-bottom: 3%; padding-left: 120px;padding-right: 120px;">
+                            <div class='input-group'>
+                                <div class="input-group-pretend">
+                                    <button type="button" class="btn btn-outline-secondary" id="showVer"
+                                            onclick="showVerSpec()">перейти на версию
+                                    </button>
+                                </div>
+                                <select class="form-control" name="version">
+                                    {% for v in s_ver %}
+                                    <option value="{{v.ver}}" {% if v.ver == s.ver %} selected {% endif %} >
+                                        {% if v.ver == 'V31-12-5999 00:00:00' %} Последняя версия {% else %} Версия от
+                                        {{v.validto}} {% endif %}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="t-Region-body">
+                            <div id="parentId">
+                                <div id='print_area'>
+                                    <div class='rpt-main'>
+                                        <div class='rpt-header'>
+                                            <div class='rpt-content'>
+                                                <h3 style='color: #5e9ca0; text-align: center;'><span
+                                                        style='color:#000000;'>Спецификация</span></h3>
+                                                <h4 style='color: #5e9ca0; text-align: center;'><span
+                                                        style='color:#000000;'>{{s.dqi_name}}</span></h4>
+                                                <h5 style='color: #5e9ca0; text-align: left;'><span
+                                                        style='color:#000000;'>Термины</span></h5>
+                                                <table class="table table-bordered">
+                                                    <tbody>
+                                                    <tr>
+                                                        <th>Термин</th>
+                                                        <th>Определение</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>КД</td>
+                                                        <td>Качество Данных</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                                <p></p>
+                                                <h5 style='color: #5e9ca0; text-align: left;'><span
+                                                        style='color:#000000;'>Ссылки</span></h5>
+                                                <table class="table table-bordered">
+                                                    <tbody>
+                                                    <tr>
+                                                        <th>Сокращенное наименование документа</th>
+                                                        <th>Полное наименование документа</th>
+                                                        <th>Ссылка на документ в Confluence/Документ</th>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                                <p></p>
+                                                <h5 style='color: #5e9ca0; text-align: left;'>
+                                                    <span style='color:#000000;'>
+                                                        Описание индикатора Качества данных
+                                                    </span>
+                                                </h5>
+                                                <table class="table table-bordered" style="border-collapse:collapse">
+                                                    <tbody>
+                                                    <tr>
+                                                        <th>Характеристика индикатора</th>
+                                                        <th>Описание</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Код:</b></td>
+                                                        <td> {{s.dqi_name}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Покрываемый сегмент:</b></td>
+                                                        <td> {{s.segment_type_name}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="height: 50px"><b>Система-источник индикатора</b></td>
+                                                        <td> {{s.control_system_name}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Система-источник данных</b></td>
+                                                        <td> {{s.data_system_name}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="height: 50px"><b>Покрываемая характеристика КД</b>
+                                                        </td>
+                                                        <td> {{s.quality_type_name}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Номер.Версия индикатора в системе-источнике</b></td>
+                                                        <td>{% if s.ind_version != None %}{{s.ind_version}}{% endif %}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Условие отбора данных для проверки</b></td>
+                                                        <td>{% if s.c_terms != None %}{{s.c_terms}}{% endif %}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Алгоритм проверки в бизнес-терминах</b></td>
+                                                        <td>{{s.dq_rule_description}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Уровень Критичности Ошибки
+                                                            (выставляется в системе DQMON)</b></td>
+                                                        <td style="padding: 0px">
+                                                            <table style='border-collapse: collapse; width: 100%; height: 109px;'
+                                                                   border='1'>
+                                                                <tbody>
+                                                                <tr style='height: 18px;'>
+                                                                    <td style='width: 22.5842%; height: 18px;'>На каком
+                                                                        уровне данных определяется
+                                                                    </td>
+                                                                    <td style='width: 55.9717%; height: 18px;'
+                                                                        colspan='3'>{{s.level_name}}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr style='height: 18px;'>
+                                                                    <td style='width: 22.5842%; height: 18px;'>
+                                                                        Критерий
+                                                                    </td>
+                                                                    <td style='width: 55.9717%; height: 18px;'
+                                                                        colspan='3'>{% if s.b_param_boundary != None
+                                                                        %}{{s.b_param_boundry}}{% endif %}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr style='height: 19px;'>
+                                                                    <td style='width: 22.5842%; height: 73px;'
+                                                                        rowspan='4'>Диапазон пороговых значений
+                                                                    </td>
+                                                                    <td style='width: 19.1232%; height: 19px;'>Уровень
+                                                                        Критичности
+                                                                    </td>
+                                                                    <td style='width: 12.2828%; height: 19px;'><span
+                                                                            lang='EN-US'>Нижняя граница диапазон</span>а
+                                                                    </td>
+                                                                    <td style='width: 24.5657%; height: 19px;'>Верх<span
+                                                                            lang='EN-US'>няя граница диапазон</span>а
+                                                                    </td>
+                                                                </tr>
+                                                                <tr style='height: 18px;'>
+                                                                    <td style='width: 19.1232%; height: 18px;'>Высокий
+                                                                    </td>
+                                                                    <td style='width: 12.2828%; height: 18px;'>
+                                                                        {{s.b_boundrymax_p_1}}
+                                                                    </td>
+                                                                    <td style='width: 24.5657%; height: 18px;'>∞</td>
+                                                                </tr>
+                                                                <tr style='height: 18px;'>
+                                                                    <td style='width: 19.1232%; height: 18px;'>Средний
+                                                                    </td>
+                                                                    <td style='width: 12.2828%; height: 18px;'>
+                                                                        {{s.b_boundrymin_p_1}}&nbsp;
+                                                                    </td>
+                                                                    <td style='width: 24.5657%; height: 18px;'>
+                                                                        {{s.b_boundrymax}}&nbsp;
+                                                                    </td>
+                                                                </tr>
+                                                                <tr style='height: 18px;'>
+                                                                    <td style='width: 19.1232%; height: 18px;'>Низкий
+                                                                    </td>
+                                                                    <td style='width: 12.2828%; height: 18px;'>0,01&nbsp;</td>
+                                                                    <td style='width: 24.5657%; height: 18px;'>
+                                                                        {{s.b_boundrymin}}&nbsp;
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Алгоритм проверки в технических терминах
+                                                            (опционально)</b></td>
+                                                        <td>{% if s.alg_tech != None %}{{s.alg_tech}}{% endif %}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Периодичность проверки / Условие запуска проверки<b></b></b>
+                                                        </td>
+                                                        <td>{% if s.schedule != None %}{{s.schedule}}{% endif %}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Характер ошибки<b></b></b>
+                                                        </td>
+                                                        <td>{{s.error_type_name}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Ответственные за методологию<b></b></b>
+                                                        </td>
+                                                        <td>{{s.metod1_full_name}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Ответственные за исправление 1<b></b></b>
+                                                        </td>
+                                                        <td>{{s.owner1_name_full}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Ответственные за исправление 2<b></b></b>
+                                                        </td>
+                                                        <td>{{s.owner2_name_full}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Ответственные за исправление 3<b></b></b>
+                                                        </td>
+                                                        <td>{{s.owner3_name_full}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><b>Ответственные за исправление 4<b></b></b>
+                                                        </td>
+                                                        <td>{{s.owner4_name_full}}</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- /.content --><a id="back-to-top" href="#" class="btn btn-primary back-to-top" role="button"
+                         aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+</a></div>
+<!-- /.content-wrapper -->{% endblock content %}
+<!-- Specific Page JS goes HERE  -->{% block javascripts %}
+<!-- jQuery -->
+<script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+<script src="/static/assets/js/1.js"></script>
+<!-- Bootstrap 4 -->
+<script src="/static/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/static/assets/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/static/assets/js/demo.js"></script>
+<script type="text/javascript"></script>
+<!-- Bootstrap4 Duallistbox -->
+<script src="/static/assets/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+<!-- InputMask -->
+<script src="/static/assets/plugins/moment/moment.min.js"></script>
+<script src="/static/assets/plugins/inputmask/jquery.inputmask.min.js"></script>
+<!-- date-range-picker -->
+<script src="/static/assets/plugins/daterangepicker/daterangepicker.js"></script>
+<!-- bootstrap color picker -->
+<script src="/static/assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="/static/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Bootstrap Switch -->
+<script src="/static/assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<!-- Select2 -->
+<script src="/static/assets/plugins/select2/js/select2.full.min.js"></script>
+<!-- custom functions for spec.html -->
+<script src="/static/assets/js/spec/ShowSpec.js"></script>
+<!-- function to initialize bootstrap elements -->
+<script src="/static/assets/js/spec/BootstrapOnLoad.js"></script>
+<script src="/static/assets/js/sweetalert2.all.min.js"></script>
+
+{% endblock javascripts %}

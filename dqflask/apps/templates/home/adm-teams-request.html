@@ -1,0 +1,168 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Forms General {% endblock %}
+
+<!-- Element injected in the BODY element -->
+{% block body_class %} sidebar-mini {% endblock body_class %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+<!-- Google Font: Source Sans Pro -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="/static/assets/plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
+<link rel="stylesheet" href="/static/assets/css/dq_mon.css">
+<link rel="stylesheet" href="/static/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="/static/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+<!-- Select2 -->
+<link rel="stylesheet" href="/static/assets/plugins/select2/css/select2.css">
+<link rel="stylesheet" href="/static/assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
+<link rel="stylesheet" href="/static/assets/css/select_rows.css">
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          {% if my_requests %}
+            <h1>Мои запросы в команды</h1>
+          {% else %}
+            <h1>Запросы на включение в команды</h1>
+          {% endif %}
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+  <input type="checkbox" id="myRequests" {% if my_requests %} checked {% endif %} disabled hidden>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <form method="post">
+            <div class="card card-success card">
+              <div class="card-header" style="background-color:#7147e8e6">
+                <h3 class="card-title">Редактирование</h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-2">
+                    <div class="form-group">
+                      <label>ID</label>
+                      <input type="text" disabled class="form-control" value="" id="team_id" name="team_id">
+                    </div>
+                  </div>
+                  <div class="col-sm-10">
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Наименование</label>
+                      <input type="text" class="form-control" id="name" name="name" required
+                        value="" disabled>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group" id="username_div">
+                      <label for="username">Добавление пользователя в команду</label>
+                      <select class="form-control" style="width: 100%;" id="username" name="username" disabled>
+                        <option value="0"></option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="is_owner" id="is_owner">
+                        <label class="form-check-label">Администратор команды</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6"></div>
+                  <div class="col-sm-6" id="user_div">
+                    <input type="button" style="float: left; width:25%;" class="btn-purple" name="action" id="acceptUser"
+                      value="Принять запрос" />
+                    <input type="button" style="float: left; width:25%;" class="btn-purple" name="action" id="declineUser"
+                      value="Отклонить запрос" />
+                    <input type="button" style="width:20%; float:right;" class="btn-purple" onclick="location.href='/admin/adm-teams';"
+                      value="Отмена" />
+                  </div>
+                </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card-body -->
+          </form>
+          <div class="card card-success">
+            <div class="card-header" style="background-color:#7147e8e6">
+              <h3 class="card-title">Заявки на включение в команду</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <div id="table">
+              <table id="team_user" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>ID команды</th>
+                    <th>Наименование команды</th>
+                    <th>ID пользователя</th>
+                    <th>Логин пользователя</th>
+                    <th>ФИО</th>
+                  </tr>
+                </thead>
+              </table>
+            <!-- /.card-body -->
+              </div>
+            </div>
+        <!--/.col (right) -->
+          </div>
+        </div>
+        <!--/.col (right) -->
+      </div>
+      <!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<!-- jQuery -->
+<script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="/static/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- bs-custom-file-input -->
+<script src="/static/assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/static/assets/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/static/assets/js/demo.js"></script>
+<script src="/static/assets/js/sweetalert2.all.min.js"></script>
+<!-- DataTables -->
+<script src="/static/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/static/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/static/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<!-- Select2 -->
+<script src="/static/assets/plugins/select2/js/select2.full.js"></script>
+<script src="/static/assets/js/dqAdmin/CustomSelect2.js"></script>
+<script type="module" src="/static/assets/js/dqAdmin/dataTableAdmin.js"></script>
+<script type="module" src="/static/assets/js/dqAdmin/dqTeamsRequests.js"></script>
+
+{% endblock javascripts %}

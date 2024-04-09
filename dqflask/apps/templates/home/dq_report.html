@@ -1,0 +1,243 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} dq_report {% endblock %} 
+
+<!-- Element injected in the BODY element -->
+{% block body_class %} sidebar-mini {% endblock body_class %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="/static/assets/plugins/fontawesome-free/css/all.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="/static/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="/static/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="/static/assets/plugins/jqvmap/jqvmap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="/static/assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="/static/assets/plugins/daterangepicker/daterangepicker.css">
+  <!-- summernote -->
+  <link rel="stylesheet" href="/static/assets/plugins/summernote/summernote-bs4.min.css">
+  
+  <link rel="stylesheet" href="/static/assets/css/dq_mon.css">
+  
+  <link rel="stylesheet" href="/static/assets/css/1.css"> 
+
+{% endblock stylesheets %}
+
+{% block content %}
+  
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">Отчет по контролю {{ dqi }}</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item active">Результат</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+	<table id = "report_time" style="visibility: hidden; display:none">
+		{% for agg in agg_rep|sort(attribute='report_date') %}
+		<tr>
+		<td>{{agg.report_date.strftime('%Y-%m-%d')}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+	<table id = "mistake_cnt" style="visibility: hidden; display:none">
+		{% for agg in agg_rep|sort(attribute='report_date') %}
+		<tr>
+		<td> {{agg.mistake_count}} </td>
+		</tr>
+		{% endfor %}
+	</table>
+    <!-- /.content-header -->
+	<section class="content">
+        <div class="row">
+          <!-- /.col (LEFT) -->
+          <div class="col-md-12">
+            <!-- BAR CHART -->
+              <div class="card card-primary card-outline">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    <i class="far fa-chart-bar"></i>
+                    Динамика ошибок
+                  </h3>
+				  <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+                </div>
+                <div class="card-body">
+                <div class="chart" style="width: 100%;">
+                  <canvas id="barChart" style="width: 100%; min-height: 250px; height: 300px; max-height: 300px;"></canvas>
+				  <div class="row">
+				  <div class="col-sm-6">
+					<div class="form-group">
+					<div style="display: inline-block;">
+				  <select class="form-control" style="font-size:14px; width: 120px;" id="startdate">
+				  {% for ag_list in agg_rep %}
+				  <option value = {{ ag_list.report_date.strftime('%Y-%m-%d') }} style="font-size:14px;" selected={{ ag_list.report_date == agg_rep.report_date|min }}>{{ ag_list.report_date.strftime('%Y-%m-%d') }}</option>
+				  {% endfor %}
+				  </select>
+					</div>
+					<div style="display: inline-block;">
+				  <select class="form-control" style="font-size:14px; width: 120px;" id="enddate">
+				  {% for ag_list in agg_rep %}
+				  <option value = {{ ag_list.report_date.strftime('%Y-%m-%d') }} {% if ag_list.report_date.strftime('%Y-%m-%d') == max_rep_date.strftime('%Y-%m-%d') %} selected={% endif %}>{{ ag_list.report_date.strftime('%Y-%m-%d') }}</option>
+				  {% endfor %}
+				  </select>
+					</div>
+					<div style="display: inline-block;">
+				  <button type="button" class="btn btn-block btn-outline-primary" style="width:140px;" onclick="showRep()">Применить</button>
+					</div>
+				  </div>
+				  </div>
+                </div>
+              </div>
+                <!-- /.card-body-->
+              </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col (RIGHT) -->
+        </div>
+        <!-- /.row -->
+        </div>
+    </section>
+    {% if is_editing %}
+    <section class="content">
+      <input type="text" id="dqi" value="{{ dqi }}" hidden>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <!-- /.card -->
+            <div class="card">
+              <!-- /.card-header -->
+              <div class="card-body">
+				<div class="row">
+                  <div class="form-group">
+				    <button type="button" class="btn-purple" style="width:100%;" id="triggerDag">Запустить</button>
+				  </div>
+                  <div class="form-group">
+				    <button type="button" class="btn-purple" style="width:100%;" id="killDag">Остановить</button>
+				  </div>
+				  <div class="form-group">
+				    <button type="button" class="btn-purple" style="width:100%;" id="pauseDag">Снять с расписания</button>
+				  </div>
+				  <div class="form-group">
+				    <button type="button" class="btn-purple" style="width:100%;" id="unpauseDag">Поставить на расписание</button>
+				  </div>
+          <div class="form-group">
+              <a href='/change-spec/{{dqi}}'><button type="button" class="btn-purple" style="width:100%; float:right">Изменить контроль</button></a>
+              </div>
+              </div>
+              <!-- /.card-footer -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+		</div>
+		</div>
+    </section>
+    {% endif %}
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <!-- /.card -->
+            <div class="card">
+              <div class="card-header">
+                <div style="display: inline-block;">
+                    <h3 class="card-title">Отчет за: </h3>
+					 </div>
+					 <div style="display: inline-block;">
+						<select autocomplete="on" id="menu" class="form-control select2" style="width: 100%;" onchange="showDetailJournal(this.value)">
+                           {% for dl in agg_rep|sort(reverse=true, attribute="report_date") %}
+                           <option value = "{{dqi}}/{{ dl.pm_workflow_run_id }}" {% if current_wf == dl.pm_workflow_run_id %} selected {% endif %}>{{ dl.report_date.strftime('%Y-%m-%d %H:%M') ~ ' строк: ' ~ dl.mistake_count }}</option>
+                           {% endfor %}
+						</select>
+					</div>
+              </div>
+                  <textarea id="columns" name="columns" hidden>{{columns}}</textarea>
+                  <textarea id="cnt_col" name="cnt_col" hidden>{{cnt_col}}</textarea>
+              <!-- /.card-header -->
+              <div class="card-body" id="reportTable">
+				<table border="1"
+                  class="dataframe table table-head-fixed table-bordered table-striped dataTable no-footer"
+                  id="dqreport" role="grid"
+                  style="overflow-x: auto; display: block; font-size:12px">
+					<thead>
+                        <tr style="text-align: center;" role="row">
+                        {% for c in col %}
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">{{c}}</th>
+                        {% endfor %}
+                        </tr>
+					</thead>
+				</table>
+              <!-- /.card-footer -->
+            </div>
+            <div id="message"></div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+		</div>
+		</div>
+    </section>
+    <!-- /.content -->
+	<!-- Main content -->
+
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <!-- jQuery -->
+  <script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4 -->
+  <script src="/static/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- DataTables -->
+  <script src="/static/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="/static/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="/static/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="/static/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+  <script src="/static/assets/plugins/chart.js/Chart.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="/static/assets/js/adminlte.min.js"></script>
+  <!-- AdminLTE for demo purposes -->
+  <script src="/static/assets/js/demo.js"></script>
+  
+  <script src="/static/assets/js/ajax/dataTables.buttons.min.js"></script>
+  <script src="/static/assets/js/ajax/buttons.print.min.js"></script>
+  <script src="/static/assets/js/ajax/buttons.html5.min.js"></script>
+  <script src="/static/assets/js/ajax/vfs_fonts.js"></script>
+  <script src="/static/assets/js/ajax/pdfmake.min.js"></script>
+  <script src="/static/assets/js/ajax/jszip.min.js"></script>
+  <script src="/static/assets/js/dqReport/dqReport.js"></script>
+<script src="/static/assets/js/apiDags/apiDags.js"></script>
+ 
+{% endblock javascripts %}

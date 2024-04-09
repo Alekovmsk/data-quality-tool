@@ -1,0 +1,1220 @@
+{% extends "layouts/base.html" %} {% block title %} Specification {% endblock %}
+<!-- Element injected in the BODY element -->{% block body_class %} {% endblock body_class %}
+<!-- Specific Page CSS goes HERE  -->{% block stylesheets %}
+<!-- Font Awesome -->
+<link rel="stylesheet" href="/static/assets/plugins/fontawesome-free/css/all.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ioniconspec.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="/static/assets/plugins/fontawesome-free/css/all.min.css">
+<!-- daterange picker -->
+<link rel="stylesheet" href="/static/assets/plugins/daterangepicker/daterangepicker.css">
+<!-- iCheck for checkboxes and radio inputs -->
+<link rel="stylesheet" href="/static/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+<!-- Bootstrap Color Picker -->
+<link rel="stylesheet" href="/static/assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+<!-- Tempusdominus Bootstrap 4 -->
+<link rel="stylesheet" href="/static/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+<!-- Select2 -->
+<link rel="stylesheet" href="/static/assets/plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="/static/assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+<!-- Bootstrap4 Duallistbox -->
+<link rel="stylesheet" href="/static/assets/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="/static/assets/css/progressbar.css">
+<link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
+<link rel="stylesheet" href="/static/assets/css/1.css">
+<link rel="stylesheet" href="/static/assets/css/dq_mon.css">
+<link rel="stylesheet" href="/static/assets/css/progressbar.css">
+{% endblock stylesheets %} {% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+
+            <form action="/" method="GET"></form>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+    <textarea id="sources" hidden>{% for source in sources %}{{source.name}},{% endfor %}</textarea>
+    <textarea id="srcName" hidden>{% for cur in cdb_info %}{{cur.source}},{% endfor %}</textarea>
+    <textarea id="srcCustomName" hidden>{% for cur in cdb_info %}{{cur.custom_source_name}},{% endfor %}</textarea>
+    <textarea id="srcSql" hidden>{% for cur in cdb_info %}{{cur.sql}},{% endfor %}</textarea>
+
+    <!------------------------------------------------------------------------------------------------------------------------------------>
+    <div class="progresswrapper">
+        <ol class="ProgressBar">
+            <li class="ProgressBar-step is-current">
+                <svg class="ProgressBar-icon">
+                    <use xlink:href="#checkmark-bold"/>
+                </svg>
+                <span class="ProgressBar-stepLabel">Спецификация</span>
+            </li>
+            <li class="ProgressBar-step">
+                <svg class="ProgressBar-icon">
+                    <use xlink:href="#checkmark-bold"/>
+                </svg>
+                <span class="ProgressBar-stepLabel">Параметры контроля</span>
+            </li>
+            <li class="ProgressBar-step">
+                <svg class="ProgressBar-icon">
+                    <use xlink:href="#checkmark-bold"/>
+                </svg>
+                <span class="ProgressBar-stepLabel">Параметры DAG</span>
+            </li>
+        </ol>
+    </div>
+
+    <div class="t-Body-contentInner">
+        <div class="container" id="parent">
+            <div>
+                <form method="post">
+                    <div id="pspec" style="display:flex" class="card card-warning-h">
+                        <div class="card-header">
+                            <h3 class="card-title">Панель редактирования спецификации</h3>
+
+                            <a onclick="deleteSpec('{{ spec.DQI_ID }}')" href='#'>
+                                <h3 class="card-title" style="float:right; color:black">Удалить</h3>
+                            </a>
+
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <input type="text" id="dqi" value="{{ spec.DQI_ID }}" hidden>
+
+                            <div id='print_area'>
+                                <div class='rpt-main'>
+                                    <div class='rpt-header'>
+                                        <br>
+                                        <div class='rpt-content'>
+                                            <h3 style='color: #5e9ca0; text-align: center;'><span
+                                                    style='color:#000000;'>Спецификация</span>
+                                            </h3>
+                                            <h4 style='color: #5e9ca0; text-align: center;'><span
+                                                    style='color:#000000;'></span></h4>
+                                            <table class="table table-bordered">
+                                                <tbody>
+                                                <tr></tr>
+                                                </tbody>
+                                            </table>
+                                            <h5 style='color: #5e9ca0; text-align: left;'><span style='color:#000000;'>Термины</span>
+                                            </h5>
+                                            <table class="table table-bordered">
+                                                <tbody>
+                                                <tr>
+                                                    <th>Термин</th>
+                                                    <th>Определение</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>КД</td>
+                                                    <td>Качество Данных</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <p></p>
+                                            <h5 style='color: #5e9ca0; text-align: left;'><span style='color:#000000;'>Ссылки</span>
+                                            </h5>
+                                            <table class="table table-bordered">
+                                                <tbody>
+                                                <tr>
+                                                    <th>Сокращенное наименование документа</th>
+                                                    <th>Полное наименование документа</th>
+                                                    <th>Ссылка на документ в Confluence/Документ</th>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <div>
+                                                <input type="text" class="form-control" id="uk" hidden
+                                                       value="{{spec.uk}}">
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="form-control" hidden
+                                                       name="dq_request_hdim" id="dq_request_hdim">
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="form-control" hidden
+                                                       name="dq_spec_hdim" id="dq_spec_hdim">
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="form-control" hidden
+                                                       name="dq_control_param_hdim" id="dq_control_param_hdim">
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="form-control" hidden
+                                                       name="dq_dag_hdim" id="dq_dag_hdim">
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="form-control" hidden
+                                                       name="dq_dag_crossdb_hdim" id="dq_dag_crossdb_hdim">
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="form-control" hidden
+                                                       name="dq_alerting_hdim" id="dq_alerting_hdim">
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="form-control" hidden
+                                                       name="dq_sql_detail_ldim" id="dq_sql_detail_ldim">
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="form-control" hidden
+                                                       name="dq_control2team_sdim" id="dq_control2team_sdim">
+                                            </div>
+                                            <p></p>
+                                            <h5 style='color: #5e9ca0; text-align: left;'><span style='color:#000000;'>
+                                              Описание индикатора Качества данных</span></h5>
+                                            <table class="table table-bordered" style="border-collapse:collapse">
+                                                <tbody>
+                                                <tr>
+                                                    <th>Характеристика индикатора</th>
+                                                    <th>Описание</th>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Код:</b></td>
+                                                    <td style="padding: 0px;">
+                                                        <input type="text" style="height: 50px;" class="form-control"
+                                                               placeholder={{spec.dqi_name}} id="dqi_name"
+                                                               disabled>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Покрываемый сегмент</b></td>
+                                                    <td style="padding: 0px;">
+                                                        <select class="form-control is-valid" name="segment_id"
+                                                                style="height: 50px;"
+                                                                id="segment_id" onfocus="validSelect('segment_id');"
+                                                                onchange="fixChanges('dq_spec_hdim');"
+                                                                required>
+                                                            <option></option>
+                                                            {% for segment in segments %}
+                                                            <option {% if spec.segment_id==segment.id|string %} selected {% endif %}
+                                                                    value="{{segment.id}}">
+                                                                {{segment.name}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <!--spec.segment_type_name-->
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="height: 50px"><b>Система-источник индикатора</b></td>
+                                                    <td style="padding: 0px;">
+                                                        <select style="height: 75px" class="form-control is-valid"
+                                                                name="ind_system"
+                                                                id="ind_system_id"
+                                                                onchange="fixChanges('dq_spec_hdim')"
+                                                                onfocus="validSelect('ind_system_id');" required>
+                                                            <option value="0"></option>
+                                                            {% for system in systems %}
+                                                            <option value="{{system.id}}"
+                                                                    {% if spec.control_system_name== system.system_name %}
+                                                                    selected {% endif %}>
+                                                                {{system.system_name}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Система-источник данных</b></td>
+                                                    <td style="padding: 0px;">
+                                                        <select class="form-control is-valid" name="data_system"
+                                                                style="height: 50px"
+                                                                id="data_system_id"
+                                                                onchange="fixChanges('dq_spec_hdim')"
+                                                                onfocus="validSelect('data_system_id');" required>
+                                                            <option value="0"></option>
+                                                            {% for system in systems %}
+                                                            <option value="{{system.id}}" {% if
+                                                                    spec.data_system_name== system.system_name %}
+                                                                    selected {% endif %}>
+                                                                {{system.system_name}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="height: 50px"><b>Покрываемая характеристика КД</b></td>
+                                                    <td style="padding: 0px;">
+                                                        <select style="height: 75px" class="form-control is-valid"
+                                                                name="quality_type_name"
+                                                                id="quality_type_id"
+                                                                onchange="fixChanges('dq_spec_hdim')"
+                                                                onfocus="validSelect('quality_type_id');" required>
+                                                            <option value="0"></option>
+                                                            {% for qt in qts %}
+                                                            <option value="{{qt.id}}"
+                                                                    {% if spec.quality_type_name== qt.quality_type_name
+                                                                    %}
+                                                                    selected {% endif %}>
+                                                                {{qt.quality_type_name}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <!--spec.quality_type_name-->
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Условие отбора данных для проверки</b></td>
+                                                    <td style="padding: 0px;">
+                                                        <textarea class="form-control is-valid" rows="3" placeholder=""
+                                                                  name="c_terms"
+                                                                  onchange="fixChanges('dq_spec_hdim')"
+                                                                  id="c_terms" onfocus="validText('c_terms');"
+                                                                  required>{% if spec.c_terms != '-' %}{{spec.c_terms}}{% endif %}</textarea>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Алгоритм проверки в бизнес-терминах</b></td>
+                                                    <td style="padding: 0px;">
+                                                        <textarea class="form-control is-valid" rows="3" placeholder="" name="alg_business"
+                                                                  id="alg_business" onfocus="validText('alg_business');"
+                                                                  onchange="fixChanges('dq_spec_hdim')"
+                                                                  required>{% if spec.dq_rule_description != '-' %}{{spec.dq_rule_description}}{% endif %}</textarea>
+                                                        <!--spec.dq_rule_description-->
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Уровень Критичности Ошибки
+                                                        (выставляется в системе SSDQ)</b></td>
+                                                    <td style="padding: 0px">
+                                                        <table style='border-collapse: collapse; width: 100%; height: 109px;'
+                                                               border='1'>
+                                                            <tbody>
+                                                            <tr style='height: 18px;'>
+                                                                <td style='width: 22.5842%; height: 18px;'>На каком
+                                                                    уровне данных определяется
+                                                                </td>
+                                                                <td style='width: 55.9717%; height: 18px; padding: 0px;'
+                                                                    colspan='3'>
+                                                                    <textarea class="form-control" rows="3"
+                                                                              style="height: 100px"
+                                                                              onchange="fixChanges('dq_spec_hdim')"
+                                                                              name="data_layer">{% if spec.level_name != '-' %}{{spec.level_name}}{% endif %}</textarea>
+                                                                </td>
+                                                            </tr>
+                                                            <tr style='height: 18px;'>
+                                                                <td style='width: 22.5842%; height: 18px;'>Критерий</td>
+                                                                <td style='width: 55.9717%; height: 18px; padding: 0px;'
+                                                                    colspan='3'><input
+                                                                        type="text" class="form-control"
+                                                                        style="height: 50px"
+                                                                        onchange="fixChanges('dq_spec_hdim')"
+                                                                        name="criterius"
+                                                                        value="{% if spec.b_param_boundary != '-' %}{{spec.b_param_boundry}}{% endif %}">
+                                                                    <!--spec.b_param_boundry-->
+                                                                </td>
+                                                            </tr>
+                                                            <tr style='height: 19px;'>
+                                                                <td style='width: 22.5842%; height: 73px;' rowspan='4'>
+                                                                    Диапазон пороговых значений
+                                                                </td>
+                                                                <td style='width: 19.1232%; height: 19px;'>
+                                                                  Уровень Критичности
+                                                                </td>
+                                                                <td style='width: 12.2828%; height: 19px;'>
+                                                                    <span lang='EN-US'>
+                                                                        Нижняя граница диапазона
+                                                                    </span>
+                                                                </td>
+                                                                <td style='width: 24.5657%; height: 19px;'>
+                                                                    <span lang='EN-US'>
+                                                                        Верхняя граница диапазона
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr style='height: 18px;'>
+                                                                <td style='width: 19.1232%; height: 18px;'>Высокий</td>
+                                                                <td style='width: 12.2828%; height: 18px; padding: 0px;'>
+                                                                    <input type="text" required
+                                                                           style="height: 50px"
+                                                                           class="form-control is-valid"
+                                                                           onchange="fixChanges('dq_spec_hdim')"
+                                                                           name="boundrymax_min"
+                                                                           value={% if spec.b_boundrymax_p_1 !='-' %}{{spec.b_boundrymax_p_1}}{% endif %}
+                                                                           id="boundrymax_min"
+                                                                           onfocus="validate(event); validText('boundrymax_min');">
+                                                                    <!--spec.b_boundrymax_p_1-->
+                                                                </td>
+                                                                <td style='width: 24.5657%; height: 18px;'>∞</td>
+                                                            </tr>
+                                                            <tr style='height: 18px;'>
+                                                                <td style='width: 19.1232%; height: 18px;'>Средний</td>
+                                                                <td style='width: 12.2828%; height: 18px; padding: 0px;'>
+                                                                    <input type="text" required
+                                                                           style="height: 50px"
+                                                                           class="form-control is-valid"
+                                                                           onchange="fixChanges('dq_spec_hdim')"
+                                                                           name="boundrymed_min"
+                                                                           value={% if spec.b_boundrymin_p_1 !='-' %}{{spec.b_boundrymin_p_1}}{% endif %}
+                                                                           id="boundrymed_min"
+                                                                           onfocus="validate(event); validText('boundrymed_min');">
+                                                                    <!--spec.b_boundrymin_p_1-->
+                                                                </td>
+                                                                <td style='width: 24.5657%; height: 18px; padding: 0px;'>
+                                                                    <input type="text" required
+                                                                           style="height: 50px"
+                                                                           class="form-control is-valid"
+                                                                           onchange="fixChanges('dq_spec_hdim')"
+                                                                           name="boundrymed_max"
+                                                                           value={% if spec.b_boundrymax !='-' %}{{spec.b_boundrymax}}{% endif %}
+                                                                           id="boundrymed_max"
+                                                                           onfocus="validate(event); validText('boundrymed_max');">
+                                                                    <!--spec.b_boundrymax-->
+                                                                </td>
+                                                            </tr>
+                                                            <tr style='height: 18px;'>
+                                                                <td style='width: 19.1232%; height: 18px;'>Низкий</td>
+                                                                <td style='width: 12.2828%; height: 18px;'>0,01&nbsp;
+                                                                </td>
+                                                                <td style='width: 24.5657%; height: 18px; padding: 0px;'>
+                                                                    <input type="text" required
+                                                                           style="height: 50px"
+                                                                           class="form-control is-valid"
+                                                                           onchange="fixChanges('dq_spec_hdim')"
+                                                                           name="boundrymin_max"
+                                                                           value={% if spec.b_boundrymin !='-' %}{{spec.b_boundrymin}}{% endif %}
+                                                                           id="boundrymin_max"
+                                                                           onfocus="validate(event); validText('boundrymin_max');">
+                                                                    <!--spec.b_boundrymin-->
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Алгоритм проверки в технических терминах (опционально)</b>
+                                                    </td>
+                                                    <td style="padding: 0px;">
+                                                        <textarea class="form-control" rows="4"
+                                                                  onchange="fixChanges('dq_spec_hdim')"
+                                                                  name="alg_tech">{% if spec.alg_tech != '-' %}{{spec.alg_tech}}{% endif %}</textarea>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Периодичность проверки / Условие запуска проверки<b></b></b>
+                                                    </td>
+                                                    <td style="padding: 0px;">
+                                                        <textarea class="form-control" rows="4"
+                                                                  onchange="fixChanges('dq_spec_hdim')"
+                                                                  name="schedule">{% if spec.schedule != '-' %}{{spec.schedule}}{% endif %}</textarea>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Характер ошибки<b></b></b>
+                                                    </td>
+                                                    <td style="padding: 0px;">
+                                                        <select class="form-control" name="error_type"
+                                                                onchange="fixChanges('dq_spec_hdim')"
+                                                                style="height: 50px">
+                                                            <option value="0"></option>
+                                                            {% for error in errors %}
+                                                            <option value="{{error.id}}"
+                                                                    {% if spec.error_type_name== error.error_type_name %}
+                                                                    selected {% endif %}>
+                                                                {{error.error_type_name}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <!--spec.error_type_name-->
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="height: 50px"><b>Ответственные за методологию<b></b></b>
+                                                    </td>
+                                                    <td style="padding: 0px;">
+                                                        <select style="font-size:0.67rem; height: 75px"
+                                                                class="form-control" name="met_owner1"
+                                                                onchange="fixChanges('dq_spec_hdim')">
+                                                            <option value="0">–</option>
+                                                            {% for owner in owners %}
+                                                            <option value="{{owner.id}}"
+                                                                    {% if spec.metod1_full_name== owner.owner_name_full %}
+                                                                    selected {% endif %}>{{owner.owner_name_full}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <!--spec.metod_full_name-->
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="height: 50px"><b>Ответственные за исправление 1<b></b></b>
+                                                    </td>
+                                                    <td style="padding: 0px;">
+                                                        <select style="font-size:0.67rem; height: 75px"
+                                                                class="form-control" name="cor_owner1"
+                                                                onchange="fixChanges('dq_spec_hdim')">
+                                                            <option value="0">–</option>
+                                                            {% for owner in owners %}
+                                                            <option value="{{owner.id}}"
+                                                                    {% if spec.owner1_name_full== owner.owner_name_full %}
+                                                                    selected {% endif %}>{{owner.owner_name_full}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+
+                                                        <!--spec.owner1_name_full-->
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="height: 50px"><b>Ответственные за исправление 2<b></b></b>
+                                                    </td>
+                                                    <td style="padding: 0px;">
+                                                        <select style="font-size:0.67rem; height: 75px"
+                                                                class="form-control" name="cor_owner2"
+                                                                onchange="fixChanges('dq_spec_hdim')">
+                                                            <option value="0">–</option>
+                                                            {% for owner in owners %}
+                                                            <option value="{{owner.id}}"
+                                                                    {% if spec.owner2_name_full== owner.owner_name_full %}
+                                                                    selected {% endif %}>{{owner.owner_name_full}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <!--spec.owner2_name_full-->
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="height: 50px"><b>Ответственные за исправление 3<b></b></b>
+                                                    </td>
+                                                    <td style="padding: 0px;">
+                                                        <select style="font-size:0.67rem; height: 75px"
+                                                                class="form-control" name="cor_owner3"
+                                                                onchange="fixChanges('dq_spec_hdim')">
+                                                            <option value="0">–</option>
+                                                            {% for owner in owners %}
+                                                            <option value="{{owner.id}}"
+                                                                    {% if spec.owner3_name_full== owner.owner_name_full %}
+                                                                    selected {% endif %}>{{owner.owner_name_full}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <!--spec.owner3_name_full-->
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="height: 50px"><b>Ответственные за исправление 4<b></b></b>
+                                                    </td>
+                                                    <td style="padding: 0px;">
+                                                        <select style="font-size:0.67rem; height: 75px"
+                                                                class="form-control" name="cor_owner4"
+                                                                onchange="fixChanges('dq_spec_hdim')">
+                                                            <option value="0">–</option>
+                                                            {% for owner in owners %}
+                                                            <option value="{{owner.id}}"
+                                                                    {% if spec.owner4_name_full== owner.owner_name_full %}
+                                                                    selected {% endif %}>{{owner.owner_name_full}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <!--spec.owner4_name_full-->
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <a>
+                                <button id="butNext1" type="button" style="float:right; width:20%"
+                                        class="btn btn-block btn-outline-primary"
+                                        onclick="ShowAndHideDivNext('pspec','pcontrol',['segment_id','ind_system_id','data_system_id','quality_type_id','alg_business','c_terms','boundrymax_min','boundrymed_min','boundrymed_max','boundrymin_max']);">
+                                    Далее
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                    <div id="pcontrol" hidden style="display:flex" class="card card-warning-h">
+                        <div class="card-header">
+                            <h3 class="card-title">Дополнительные параметры контроля</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <!-- text input -->
+                                    <div class="form-group">
+                                        <label>Название контроля</label>
+                                        <input type="text" class="form-control is-valid"
+                                               onfocus="validText('control_name');"
+                                               id="control_name" name="control_name" required
+                                               onchange="fixChanges('dq_request_hdim'); fixChanges('dq_control_param_hdim');"
+                                               value="{{ spec.control_name if spec.control_name is not none}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Описание контроля</label>
+                                        <textarea class="form-control is-valid" rows="4"
+                                                  onfocus="validText('control_description');"
+                                                  id="control_description" name="control_description"
+                                                  onchange="fixChanges('dq_control_param_hdim');"
+                                                  required>{{ spec.control_description if spec.control_description is not none }}</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Инициатор</label>
+                                        <input type="text" class="form-control" placeholder="" name="control_init"
+                                               onchange="fixChanges('dq_control_param_hdim');"
+                                               value="{{ spec.control_init if spec.control_init is not none }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Заказчик</label>
+                                        <select class="form-control" name="client_dept_id">
+                                            <option value="0"></option>
+                                            {% for dep in deps %}
+                                            <option value="{{dep.id}}"
+                                                    {% if spec.client_dept_id== dep.id %}selected{% endif %}>
+                                                [{{dep.business_category}}] {{dep.dept_name}} {{dep.dept_id}}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Номер релиза</label>
+                                        <input type="text" class="form-control" placeholder="" name="release_number"
+                                               onchange="fixChanges('dq_control_param_hdim');"
+                                               value="{{ spec.release_number if spec.release_number is not none }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Номер дефекта или CR</label>
+                                        <input type="text" class="form-control" placeholder="" name="cr_number"
+                                               onchange="fixChanges('dq_control_param_hdim');"
+                                               value="{{ spec.cr_number if spec.cr_number is not none }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Плановая дата исправления</label>
+                                        <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input"
+                                                   data-inputmask-alias="datetime"
+                                                   data-inputmask-inputformat="mm/dd/yyyy" data-mask name="cor_date"
+                                                   onchange="fixChanges('dq_control_param_hdim');"
+                                                   value="{{datef if datef is not none}}"
+                                                   data-target="#reservationdate"/>
+                                            <div class="input-group-append" data-target="#reservationdate"
+                                                 data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Сместить дату на графике на</label>
+                                        <input type="text" class="form-control" placeholder="" name="move_date"
+                                               onchange="fixChanges('dq_control_param_hdim');"
+                                               value="{{ spec.move_date if spec.move_date is not none }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Отложить запуск контроля на</label>
+                                        <select class="form-control" name="delay"
+                                                onchange="fixChanges('dq_control_param_hdim');">
+                                            <option>-</option>
+                                            <option {% if spec.delay=='10 минут' %} selected {% endif %}>10 минут</option>
+                                            <option {% if spec.delay=='20 минут' %} selected {% endif %}>20 минут</option>
+                                            <option {% if spec.delay=='30 минут' %} selected {% endif %}>30 минут</option>
+                                            <option {% if spec.delay=='40 минут' %} selected {% endif %}>40 минут</option>
+                                            <option {% if spec.delay=='50 минут' %} selected {% endif %}>50 минут</option>
+                                            <option {% if spec.delay=='1 час' %} selected {% endif %}>1 час</option>
+                                            <option {% if spec.delay=='2 часа' %} selected {% endif %}>2 часа</option>
+                                            <option {% if spec.delay=='3 часа' %} selected {% endif %}>3 часа</option>
+                                            <option {% if spec.delay=='4 часа' %} selected {% endif %}>4 часа</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Рассылать почту</label>
+                                        <select class="form-control" name="mail_type"
+                                                onchange="fixChanges('dq_control_param_hdim');">
+                                            <option {% if spec.mail_type=='Всегда' %} selected {% endif %}>Всегда</option>
+                                            <option {% if spec.mail_type=='Если есть критичный результат' %} selected {% endif %}>
+                                                Если есть критичный результат
+                                            </option>
+                                            <option {% if spec.mail_type=='Никогда' %} selected {% endif %}>Никогда</option>
+                                            <option {% if spec.mail_type=='Если превышены пороговые значения' %} selected {% endif %}>
+                                                Если превышены пороговые значения
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="ror_flag"
+                                                   {% if spec.ror_flag=='Y'%} checked {% endif %}
+                                                   onchange="fixChanges('dq_control_param_hdim');">
+                                            <label class="form-check-label">Рассылка отдельных результатов</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="mail_h_flag"
+                                                   {% if spec.mail_h_flag=='Y' %} checked {% endif %}
+                                                   onchange="fixChanges('dq_control_param_hdim');">
+                                            <label class="form-check-label">Сообщение из MAIL_HEADER в письме</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="officer">Офицер</label>
+                                        <div class="div-is-valid" id="officer">
+                                            <select class="form-control" style="width: 100%;"
+                                                    onchange="fixChanges('dq_control_param_hdim'); validDiv('officer','officer_uk')"
+                                                    name="officer_uk" id="officer_uk">
+                                                {% for officer in officers %}
+                                                {% if officer.uk == spec.officer_uk %}
+                                                <option value={{ officer.uk }} selected>{{ officer.full_name }} ({{ officer.email }})</option>
+                                                {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Действия офицера при ошибках</label>
+                                        <textarea class="form-control is-valid" rows="4"
+                                                  onfocus="validText('officer_to_do');"
+                                                  id="officer_to_do" name="officer_to_do"
+                                                  onchange="fixChanges('dq_control_param_hdim');"
+                                                  required>{{spec.officer_to_do if spec.officer_to_do is not none }}</textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="obj_name">Объект контроля</label>
+                                        <div class="div-is-valid" id="object_name">
+                                            <select class="form-control"
+                                                    style="width: 100%; border-color: #dc3545;" id="obj_name"
+                                                    onchange="validDiv('object_name','obj_name'); fixChanges('dq_control_param_hdim');"
+                                                    name="dq_object_uk">
+                                                <option value={{ object.uk }}>{{ object.schema }}.{{ object.table_name }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Ссылка на Wiki</label>
+                                        <input type="text" class="form-control" placeholder="" name="wiki_link"
+                                               onchange="fixChanges('dq_control_param_hdim');"
+                                               value="{{ spec.wiki_link if spec.wiki_link is not none }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Статус контроля</label>
+                                        <select class="form-control is-valid" name="dq_status_uk"
+                                                onchange="fixChanges('dq_control_param_hdim');"
+                                                onfocus="validSelect('dq_status_uk');">
+                                            <option value="0"></option>
+                                            {% for status in statuses %}
+                                            <option value={{ status.uk }} {% if spec.dq_status_uk==status.uk %}selected{% endif %}>
+                                                {{ status.name }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Путь для выгрузки</label>
+                                        <select class="form-control" name="dq_ftp_path_uk"
+                                                onchange="fixChanges('dq_control_param_hdim');">
+                                            <option value="0"></option>
+                                            {% for ftp in ftps %}
+                                            <option value={{ ftp.uk }} {% if spec.dq_ftp_path_uk== ftp.uk %}selected{% endif %}>
+                                                {{ ftp.host }}{{ ftp.path_name }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Стюард</label>
+                                        <select class="form-control" style="width: 100%;"
+                                                onchange="fixChanges('dq_control_param_hdim');"
+                                                name="steward_uk" id="steward_uk">
+                                            {% for officer in officers %}
+                                            {% if officer.uk == spec.steward_uk %}
+                                            <option value={{ officer.uk }} selected>{{ officer.full_name }} ({{ officer.email }})</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="control_critical_flag"
+                                                   onchange="fixChanges('dq_control_param_hdim');"
+                                                   {% if spec.control_critical_flag=='Y'%} checked {% endif %}>
+                                            <label class="form-check-label">Флаг критичности контроля</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Алёртинг</label><br>
+                                        <label>Результат в письме</label>
+                                        <div class="select2-purple">
+                                            <select multiple="multiple"
+                                                    data-dropdown-css-class="select2-purple"
+                                                    onchange="fixChanges('dq_alerting_hdim');"
+                                                    style="width: 100%;" name="alerting" id="alerting">
+                                                <option value="0"></option>
+                                                {% for officer in officers %}
+                                                <option value={{ officer.uk }}
+                                                        {% for j in alerting %}{% if officer.uk==j.user_uk %}
+                                                        selected {% endif %}{% endfor %}>
+                                                    {{ officer.full_name }} ({{officer.email}})
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>Связь с командами</label><br>
+                                        <div class="select2-purple">
+                                            <select multiple="multiple"
+                                                    data-dropdown-css-class="select2-purple" style="width: 100%;"
+                                                    onchange="fixChanges('dq_control2team_sdim');"
+                                                    name="teams" id="teams">
+                                                <option value="0"></option>
+                                                {% for team in teams %}
+                                                <option value={{ team.id }} selected>
+                                                    {{ team.name }}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <a href="#">
+                                    <button id="butPrev1" type="button" style="float:left; width:20%"
+                                            class="btn btn-block btn-outline-primary"
+                                            onclick="ShowAndHideDivPrev('pspec','pcontrol');">
+                                        Назад
+                                    </button>
+                                </a>
+                                <a>
+                                    <button id="butNext2" type="button" style="float:right; width:20%"
+                                            class="btn btn-block btn-outline-primary"
+                                            onclick="ShowAndHideDivNext('pcontrol','pdag',['control_name','control_description','officer_to_do','obj_name'])">
+                                        Далее
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="pdag" hidden style="display:flex" class="card card-warning-h">
+                        <div class="card-header">
+                            <h3 class="card-title">Параметры DAG</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group" id="div_check_crossdb">
+                                <div class="custom-control custom-switch" >
+                                  <input type="checkbox" name="check_crossdb" class="custom-control-input" id="check_crossdb"
+                                         {% if spec.crossdb_flag=='Y' %} checked {% endif %} >
+                                  <label class="custom-control-label" for="check_crossdb">Кросс-базовый запрос</label>
+                                </div>
+                            </div>
+                        <div id="onedb" class="card-body" style="padding: 0px">
+                            <div class="col-sm-6">
+                                <div class="form-group" style="margin-left: -1%" id="div_source">
+                                    <label>Источник</label>
+                                    <select class="{{ 'is-valid' if spec.source_name is not none else 'is-invalid' }} form-control"
+                                            style="width: 100%;" onmousedown="validSelect('source');"
+                                            onchange="fixChanges('dq_dag_hdim');"
+                                            id="source" name="source">
+                                        <option></option>
+                                        {% for source in sources %}
+                                        <option value={{ source.name }} {% if source.name == spec.source_name %}selected{% endif %}>
+                                            {{ source.name }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-block btn-default"
+                                        onclick="showDiv('zap1')">Запрос
+                                </button>
+                                <div id="zap1" hidden style="display:flex; width: 100%;" class="input-group mb-3">
+                                    <textarea class="form-control {{ 'is-valid' if spec.source_query is not none else 'is-invalid' }}"
+                                              rows="12" onfocus="validText('sql_query');"
+                                              onchange="fixChanges('dq_dag_hdim');"
+                                              id="sql_query" name="sql_query">{{ spec.source_query if spec.source_query is not none}}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom:25px;">
+                                <div class="card card-warning collapsed-card">
+                                    <div class="card-header"
+                                         style="padding: 0px; height:30px;  background-color:transparent; border-radius: .25rem;">
+
+                                        <button type="button" class="btn btn-block btn-default" data-card-widget="collapse"
+                                                title="Collapse" style="padding: 0px; height:40px">
+                                            Как правильно составить запрос?
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="text-left">
+                                        <pre>
+[WITH ... AS ...]
+
+SELECT
+   ... AS DESCRIPTION,      /* Ошибка-Информационное сообщение */
+   ... AS COLUMN_UK1,       /* сущность-атрибут -Привязка к контуру ПВР*/
+   ... AS COLUMN_UK2,       /* сущность-атрибут -Привязка к контуру ПВР */
+   ... AS COLUMN_UK3,       /* сущность-атрибут -Привязка к контуру ПВР */
+   ... AS RESULT_CHAR1,     /* результат в формате char/varchar2 (вставить NULL, если такое значение не требуется) */
+   ... AS RESULT_CHAR2,     /* результат в формате char/varchar2 (вставить NULL, если такое значение не требуется) */
+   ... AS RESULT_CHAR3,     /* результат в формате char/varchar2 (вставить NULL, если такое значение не требуется) */
+   ... AS RESULT_CHAR4,     /* результат в формате char/varchar2 (вставить NULL, если такое значение не требуется) */
+   ... AS RESULT_CHAR5,     /* результат в формате char/varchar2 (вставить NULL, если такое значение не требуется) */
+   ... AS RESULT_CHAR6,     /* результат в формате char/varchar2 (вставить NULL, если такое значение не требуется) */
+   ... AS RESULT_NUM1,      /* результат в формате number (вставить NULL, если такое значение не требуется) */
+   ... AS RESULT_NUM2,      /* результат в формате number (вставить NULL, если такое значение не требуется) */
+   ... AS RESULT_NUM3,      /* результат в формате number (вставить NULL, если такое значение не требуется) */
+   ... AS RESULT_NUM4,      /* результат в формате number (вставить NULL, если такое значение не требуется) */
+   ... AS RESULT_DATE1,     /* результат в формате date (вставить NULL, если такое значение не требуется) */
+   ... AS RESULT_DATE2,     /* результат в формате date (вставить NULL, если такое значение не требуется) */
+   ... AS RESULT_DATE3,     /* результат в формате date (вставить NULL, если такое значение не требуется) */
+   ... AS RESULT_DATE4,     /* результат в формате date (вставить NULL, если такое значение не требуется) */
+   ... AS RESULT_CUR,       /* результат - сумма (вставить NULL, если такое значение не требуется) */
+   ... AS IMPACT_VALUE,     /* вставить NULL, если такое значение не требуется)*/
+   ... AS RULE_DESCRIPTION, /*описание результата*/
+   ... AS RESULT_OWNER,     /*кому направить данную запись с ошибкой*/
+   ... AS MAIL_HEADER       /*текст письма с ошибкой*/
+FROM ...
+                                        </pre>
+                                    </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+                    </div>
+                            <div id="crossdb" style="display: none;">
+                                <input type="number" id="srcCount" name="srcCount" hidden value="{{ src_count }}">
+                                <div id="crossdbScripts"></div>
+                                <div class="form-group" id="crdbButtons">
+                                    <div class="btn-group" style="width: 100%;">
+                                        <button id="plus_src" type="button" class="btn btn-default" onclick="addSrc()">Добавить источник</button>
+                                        <button id="minus_src" type="button" class="btn btn-default" onclick="removeSrc()" disabled>Удалить источник</button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button id ="butShow" type="button" class="btn btn-block btn-default" onclick="showDiv('main_query')">Главный запрос</button>
+                                    <div style="display:flex; width: 100%;" class="input-group mb-3">
+                                        <textarea class="form-control {% if spec.crossdb_flag=='Y' %} is-valid {% else %} is-invalid {% endif %}"
+                                                  rows="12" onfocus="validText('main_query');"
+                                                  id="main_query" name="main_query">{{main_sql.sql}}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="button" class="btn btn-block btn-default"
+                                        onclick="showDiv('zap3')">Алгоритм
+                                </button>
+                                <div id="zap3" hidden style="display:flex; width: 100%;" class="input-group mb-3">
+                                    <textarea class="form-control" rows="12"
+                                              onchange="fixChanges('dq_dag_hdim');"
+                                              name="alg">{{ spec.alg if spec.alg is not none}}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-block btn-default" onclick="showDiv('zap4')">
+                                    Запрос из детального журнала
+                                </button>
+                                <div id="zap4" hidden style="display:flex; width: 100%;" class="input-group mb-3">
+                                    <textarea class="form-control" rows="12"
+                                              onchange="fixChanges('dq_sql_detail_ldim');"
+                                              name="detail_query">{{ det_sql.sql_query }}</textarea>
+                                </div>
+                            </div>
+                    <div class="col-sm-6">
+                        <!-- radio -->
+                        <div class="form-group">
+                            <div class="custom-control custom-radio">
+                                <input class="custom-control-input" type="radio" id="customRadio1" checked
+                                       name="customRadio">
+                                <label for="customRadio1" class="custom-control-label">Запуск по расписанию</label>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label>запуск:</label>
+                                    <select class="form-control" onchange="selectSch(); fixChanges('dq_dag_hdim');"
+                                            id="select_sch" name="select_sch">
+                                        <option value="none" {% if sc.value=='none' %} selected {% endif %}>
+                                            не запускать
+                                        </option>
+                                        <option value="minutes" {% if sc.value=='minutes' %} selected {% endif %}>
+                                            каждые минуты
+                                        </option>
+                                        <option value="hour" {% if sc.value=='hour' %} selected {% endif %}>
+                                            каждый час
+                                        </option>
+                                        <option value="day" {% if sc.value=='day' %} selected {% endif %}>
+                                            каждый день
+                                        </option>
+                                        <option value="week" {% if sc.value=='week' %} selected {% endif %}>
+                                            каждую неделю
+                                        </option>
+                                        <option value="month" {% if sc.value=='month' %} selected {% endif %}>
+                                            каждый месяц
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2" id="minutediv" hidden>
+                                    <label>минуты</label>
+                                    <select class="form-control" id="minute_select" onchange="printSch();fixChanges('dq_dag_hdim');"
+                                            name="minute_select">
+                                        <option value="5" {% if sc.minutes=='5' %}selected{% endif %}>05</option>
+                                        <option value="10" {% if sc.minutes=='10' %}selected{% endif %}>10</option>
+                                        <option value="15" {% if sc.minutes=='15' %}selected{% endif %}>15</option>
+                                        <option value="20" {% if sc.minutes=='20' %}selected{% endif %}>20</option>
+                                        <option value="25" {% if sc.minutes=='25' %}selected{% endif %}>25</option>
+                                        <option value="30" {% if sc.minutes=='30' %}selected{% endif %}>30</option>
+                                        <option value="35" {% if sc.minutes=='35' %}selected{% endif %}>35</option>
+                                        <option value="40" {% if sc.minutes=='40' %}selected{% endif %}>40</option>
+                                        <option value="45" {% if sc.minutes=='45' %}selected{% endif %}>45</option>
+                                        <option value="50" {% if sc.minutes=='50' %}selected{% endif %}>50</option>
+                                        <option value="55" {% if sc.minutes=='55' %}selected{% endif %}>55</option>
+                                    </select>
+                                </div>
+                                <div id="hourdiv" class="form-group col-md-2" hidden>
+                                    <label>минуты</label>
+                                    <select class="form-control" id="hour_select" onchange="printSch(); fixChanges('dq_dag_hdim');"
+                                            name="hour_select">
+                                        {% for minute in minutes %}
+                                        <option value="{{minute}}"
+                                                {% if minute== sc.minute_in_hour %}selected{% endif %}>
+                                            {{minute}}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2" id="time_hour_day_div" hidden>
+                                    <label>часы</label>
+                                    <select class="form-control" id="time_hour_day_select" onchange="printSch(); fixChanges('dq_dag_hdim');"
+                                            name="time_hour_day_select">
+                                        {% for hour in hours %}
+                                        <option value="{{hour}}" {% if hour==sc.hour_in_day %}selected{% endif %}>
+                                            {{hour}}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2" id="time_minute_day_div" hidden>
+                                    <label>минуты</label>
+                                    <select class="form-control" id="time_minute_day_select" onchange="printSch(); fixChanges('dq_dag_hdim');"
+                                            name="time_minute_day_select">
+                                        {% for minute in minutes %}
+                                        <option value="{{minute}}"
+                                                {% if minute==sc.minute_in_day %}selected{% endif %}>
+                                            {{minute}}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div id="time_hour_week_div" class="form-group col-md-2" hidden>
+                                    <label>часы</label>
+                                    <select class="form-control" id="time_hour_week_select" onchange="printSch(); fixChanges('dq_dag_hdim');"
+                                            name="time_hour_week_select">
+                                        {% for hour in hours %}
+                                        <option value="{{hour}}" {% if hour==sc.hour_in_week %}selected{% endif %}>
+                                            {{hour}}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div id="time_minute_week_div" class="form-group col-md-2" hidden>
+                                    <label>минуты</label>
+                                    <select class="form-control" id="time_minute_week_select" onchange="printSch(); fixChanges('dq_dag_hdim');"
+                                            name="time_minute_week_select">
+                                        {% for minute in minutes %}
+                                        <option value="{{minute}}"
+                                                {% if minute==sc.minute_in_week %}selected{% endif %}>
+                                            {{minute}}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div id="day_of_week_div" class="form-group col-md-4" hidden>
+                                    <label>день</label>
+                                    <select class="form-control" id="day_of_week_select" onchange="printSch(); fixChanges('dq_dag_hdim');"
+                                            name="day_of_week_select">
+                                        <option value="понедельник" {% if sc.day_in_week=='понедельник' %}selected{% endif %}>
+                                            понедельник
+                                        </option>
+                                        <option value="вторник" {% if sc.day_in_week=='вторник' %}selected{% endif %}>
+                                            вторник
+                                        </option>
+                                        <option value="среда" {% if sc.day_in_week=='среда' %}selected{% endif %}>
+                                            среда
+                                        </option>
+                                        <option value="четверг" {% if sc.day_in_week=='четверг' %}selected{% endif %}>
+                                            четверг
+                                        </option>
+                                        <option value="пятница" {% if sc.day_in_week=='пятница' %}selected{% endif %}>
+                                            пятница
+                                        </option>
+                                        <option value="суббота" {% if sc.day_in_week=='суббота' %}selected{% endif %}>
+                                            суббота
+                                        </option>
+                                        <option value="воскресенье" {% if sc.day_in_week=='воскресенье' %}selected{% endif %}>
+                                            воскресенье
+                                        </option>
+                                    </select>
+                                </div>
+                                <div id="time_hour_month_div" class="form-group col-md-2" hidden>
+                                    <label>часы</label>
+                                    <select class="form-control" id="time_hour_month_select" onchange="printSch(); fixChanges('dq_dag_hdim');"
+                                            name="time_hour_month_select">
+                                        {% for hour in hours %}
+                                        <option value="{{hour}}" {% if hour==sc.hour_in_month %}selected{% endif %}>
+                                            {{hour}}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div id="time_minute_month_div" class="form-group col-md-2" hidden>
+                                    <label>минуты</label>
+                                    <select class="form-control" id="time_minute_month_select" onchange="printSch(); fixChanges('dq_dag_hdim');"
+                                            name="time_minute_month_select">
+                                        {% for minute in minutes %}
+                                        <option value="{{minute}}"
+                                                {% if minute==sc.minute_in_month %}selected{% endif %}>
+                                            {{minute}}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div id="day_of_month_div" class="form-group col-md-4" hidden>
+                                    <label>день месяца</label>
+                                    <select class="form-control" id="day_of_month_select" onchange="printSch(); fixChanges('dq_dag_hdim');"
+                                            name="day_of_month_select">
+                                        {% for day in days_in_month %}
+                                        <option value="{{day}}" {% if day==sc.day_in_month %}selected{% endif %}>
+                                            {{day}}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="descForSch" class="form-group"></div>
+                            <div id="place_for_links" style="display: none;"></div>
+                        </div>
+                    </div>
+                        <div class="row" style="float:center">
+                            <div class="form-group">
+                                <button type="button" class="btn-purple" style="width:100%;" id="triggerDag">Запустить</button>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn-purple" style="width:100%;" id="killDag">Остановить</button>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn-purple" style="width:100%;" id="pauseDag">Снять с расписания</button>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn-purple" style="width:100%;" id="unpauseDag">Поставить на расписание</button>
+                            </div>
+                            <div class="form-group">
+                                <a href='/dq_report/{{spec.uk}}'>
+                                    <button type="button" class="btn-purple"
+                                            style="width:100%;">Результат
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                        <div>
+                            <a href="#">
+                                <button id="butPrev2" type="button" style="float:left; width:20%"
+                                        class="btn btn-block btn-outline-primary"
+                                        onclick="ShowAndHideDivPrev('pcontrol','pdag')">Назад
+                                </button>
+                            </a>
+                            <a>
+                                <button id="butDone1" type="submit" style="float:right; width:20%"
+                                        class="btn btn-block btn-outline-primary"
+                                        onclick="showLinksSpec();done('pdag',['source','sql_query']);">
+                                    Завершить
+                                </button>
+                            </a>
+                        </div>
+                        </div>
+                    </div>
+                </form>
+        </div>
+        <div id="div_load" hidden>
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border text-success m-5" style="width: 7rem; height: 7rem;"></div>
+            </div>
+        </div>
+<!-- /.card-body -->
+        </div>
+    </div>
+</div>
+
+<svg xmlns="http://www.w3.org/2000/svg">
+    <symbol id="checkmark-bold" viewBox="0 0 24 24">
+        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/>
+    </symbol>
+</svg>
+
+
+<!-- /.content -->
+<a id="back-to-top" href="#" class="btn btn-primary back-to-top" role="button"
+   aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<!-- /.content-wrapper -->{% endblock content %}
+<!-- Specific Page JS goes HERE  -->{% block javascripts %}
+<!-- jQuery -->
+<script nomodule src="static/assets/js/ioniconspec.js"></script>
+<script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+<script src="/static/assets/js/progressbar.js"></script>
+<!-- Bootstrap 4 -->
+<script src="/static/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/static/assets/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/static/assets/js/demo.js"></script>
+<!-- jQuery -->
+<script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="/static/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Select2 -->
+<script src="/static/assets/plugins/select2/js/select2.full.js"></script>
+<!-- Bootstrap4 Duallistbox -->
+<script src="/static/assets/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+<!-- InputMask -->
+<script src="/static/assets/plugins/moment/moment.min.js"></script>
+<script src="/static/assets/plugins/inputmask/jquery.inputmask.min.js"></script>
+<!-- date-range-picker -->
+<script src="/static/assets/plugins/daterangepicker/daterangepicker.js"></script>
+<!-- bootstrap color picker -->
+<script src="/static/assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="/static/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Bootstrap Switch -->
+<script src="/static/assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/static/assets/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/static/assets/js/demo.js"></script>
+<script src="/static/assets/js/sweetalert2.all.min.js"></script>
+<!-- function to initialize bootstrap elements -->
+<script src="/static/assets/js/spec/BootstrapOnLoad.js"></script>
+<script src="/static/assets/js/spec/FieldsValidate.js"></script>
+<script src="/static/assets/js/spec/CronValidate.js"></script>
+<script src="/static/assets/js/spec/ChangeSpec.js"></script>
+<script src="/static/assets/js/spec/dq_js.js"></script>
+<script src="/static/assets/js/spec/crossDB.js"></script>
+<script src="/static/assets/js/spec/CustomSelect2.js"></script>
+<script src="/static/assets/js/apiDags/apiDags.js"></script>
+
+{% endblock javascripts %}
