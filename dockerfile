@@ -1,5 +1,5 @@
 FROM python:3.10
-MAINTAINER Vladimir Pak 'pvolodyas@gmail.com'
+MAINTAINER Kozlov Aleksey 'alekov.msk@yandex.ru'
 
 RUN adduser --disabled-password ssdqadmin
 

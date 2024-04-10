@@ -22,7 +22,7 @@ class LogLoad:
             scheduler.add_job(func=self.insert_logs, trigger="interval",
                               seconds=ConfYaml.config['logging']['upload_schedule']['upload_frequency'])
 
-        scheduler.add_job(func=self.delete_logs(), trigger="cron", hour='23', minute='59')
+        scheduler.add_job(func=self.delete_logs, trigger="cron", hour='23', minute='59')
 
         return scheduler
 
@@ -32,7 +32,7 @@ class LogLoad:
         self.dq_session.commit()
 
     def delete_logs(self):
-        storage_depth = datetime.now() - timedelta(days=365*int(ConfYaml.logging_conf['logging']['storage_depth']))
+        storage_depth = datetime.now() - timedelta(days=365*int(Conf-Yaml.config['logging']['storage_depth']))
         self.dq_session.query(Log).filter(Log.created_at < storage_depth).delete()
 
     @staticmethod

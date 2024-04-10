@@ -24,7 +24,8 @@ services:
     restart: unless-stopped
     networks:
       default:
-        ipv4_address: 172.16.1.4
+        ipv4_address: localhost
+  #      ipv4_address: 172.16.1.4
       
   ssdq_server:
     container_name: ssdq_server_container
