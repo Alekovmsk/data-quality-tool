@@ -1,21 +1,21 @@
 database:
   dqServer: # database credentials
     type: postgresql
-    host: 172.16.1.4
+    host: 192.168.1.66
     port: 5432
     db: ssdq
     user: ssdq_admin
     password: admin_pass
   flaskDb: # database credentials (for admin database with users and logs)
     type: postgresql
-    host: 172.16.1.4
+    host: 192.168.1.66
     port: 5432
     db: ssdq_admin
     user: ssdq_admin
     password: admin_pass
   srcUsers: # database credentials for uploading users info
     type: postgresql
-    host: localhost
+    host: 192.168.1.66
     port: 5432
     db: db_name
     user: user_name
