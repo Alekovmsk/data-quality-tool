@@ -9,4 +9,5 @@ If necessary, configure log configurations (logging.conf).
 2. In the config folder, specify the parameters for connecting to KeyCloak.
 3. When starting with the https protocol, place the certificates in the cert folder. And also in the docker-compose-ssdq.yaml file for the ssdq_server service, uncomment the line ./cert:/app/dqflask/cert.
 4. In the docker-compose-ssdq.yaml file, edit POSTGRES_USER and POSTGRES_PASSWORD. Align the configuration file (config.yaml).
-5. Run with the command: docker-compose –f docker-compose-ssdq.yaml up –d
+5. Run with the command:
+docker run --name ssdq_postgres_container -p 5432:5432 -e POSTGRES_USER=ssdq_admin -e POSTGRES_PASSWORD=admin_pass -e POSTGRES_DB=ssdq -e PGDATA=/var/lib/postgresql/data/pgdata -d -v "$(pwd)"/init_scripts/:/docker-entrypoint-initdb.d postgres:14-alpine3.19
